@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toko Online Kami</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f0f8ff;
+      transition: background-color 2s ease;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #0080ff, #ff8000);
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .product-info {
+      padding: 1.5rem;
+    }
+    
+    .product-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ff8000;
+      margin-bottom: 1rem;
+    }
+    
+    .btn-whatsapp {
+      display: inline-block;
+      background: linear-gradient(to right, #25d366, #128C7E);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(37, 211, 102, 0.3);
+    }
+    
+    .btn-whatsapp:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      background: linear-gradient(135deg, #ff8000, #0080ff);
+      color: white;
+      margin-top: 2rem;
+    }
+    
+    /* Animasi Cuaca */
+    .weather-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.7;
+    }
+    
+    /* Animasi Salju */
+    .snowflake {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: snowfall linear infinite;
+    }
+    
+    @keyframes snowfall {
+      0% {
+        transform: translateY(-10px) translateX(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 10px)) translateX(20px) rotate(360deg);
+      }
+    }
+    
+    /* Animasi Hujan */
+    .raindrop {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(30,144,255,0.5));
+      animation: rainfall linear infinite;
+    }
+    
+    @keyframes rainfall {
+      0% {
+        transform: translateY(-100px);
+      }
+      100% {
+        transform: translateY(calc(100vh + 100px));
+      }
+    }
+    
+    /* Animasi Cuaca Cerah */
+    .sun {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #ffff00, #ff8c00);
+      border-radius: 50%;
+      box-shadow: 0 0 40px #ffff00;
+      animation: sun-pulse 3s infinite alternate;
+    }
+    
+    @keyframes sun-pulse {
+      0% {
+        box-shadow: 0 0 40px #ffff00;
+        transform: scale(1);
+      }
+      100% {
+        box-shadow: 0 0 60px #ffff00;
+        transform: scale(1.1);
+      }
+    }
+    
+    .weather-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .weather-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(to right, #0080ff, #005bb5);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .weather-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .weather-btn.hujan {
+      background: linear-gradient(to right, #4b6cb7, #182848);
+    }
+    
+    .weather-btn.salju {
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      color: #333;
+    }
+    
+    .weather-btn.cerah {
+      background: linear-gradient(to right, #ff8000, #ffc837);
+    }
+  </style>
+</head>
+<body>
+  <div class="weather-effect" id="weatherEffect"></div>
+  
+  <header class="header">
+    <h1>Toko Online Kami</h1>
+    <p>Temukan Produk Berkualitas dengan Harga Terbaik</p>
+  </header>
+  
+  <div class="container">
+    <div class="weather-controls">
+      <button class="weather-btn salju" onclick="changeWeather('snow')">Tema Salju</button>
+      <button class="weather-btn hujan" onclick="changeWeather('rain')">Tema Hujan</button>
+      <button class="weather-btn cerah" onclick="changeWeather('sunny')">Tema Cerah</button>
+    </div>
+    
+    <div class="product-grid">
+      <!-- Produk 1 -->
+      <div class="product-card">
+        <img src="/api/placeholder/400/320" alt="Produk 1" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">Sepatu Olahraga Premium</h3>
+          <div class="product-price">Rp 799.000</div>
+          <a href="https://wa.me/628123456789?text=Saya%20tertarik%20dengan%20Sepatu%20Olahraga%20Premium" class="btn-whatsapp">Pesan via WhatsApp</a>
+        </div>
+      </div>
+      
+      <!-- Produk 2 -->
+      <div class="product-card">
+        <img src="/api/placeholder/400/320" alt="Produk 2" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">Tas Ransel Waterproof</h3>
+          <div class="product-price">Rp 450.000</div>
+          <a href="https://wa.me/628123456789?text=Saya%20tertarik%20dengan%20Tas%20Ransel%20Waterproof" class="btn-whatsapp">Pesan via WhatsApp</a>
+        </div>
+      </div>
+      
+      <!-- Produk 3 -->
+      <div class="product-card">
+        <img src="/api/placeholder/400/320" alt="Produk 3" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">Headphone Bluetooth</h3>
+          <div class="product-price">Rp 350.000</div>
+          <a href="https://wa.me/628123456789?text=Saya%20tertarik%20dengan%20Headphone%20Bluetooth" class="btn-whatsapp">Pesan via WhatsApp</a>
+        </div>
+      </div>
+      
+      <!-- Produk 4 -->
+      <div class="product-card">
+        <img src="/api/placeholder/400/320" alt="Produk 4" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">Jam Tangan Digital</h3>
+          <div class="product-price">Rp 599.000</div>
+          <a href="https://wa.me/628123456789?text=Saya%20tertarik%20dengan%20Jam%20Tangan%20Digital" class="btn-whatsapp">Pesan via WhatsApp</a>
+        </div>
+      </div>
+      
+      <!-- Produk 5 -->
+      <div class="product-card">
+        <img src="/api/placeholder/400/320" alt="Produk 5" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">Kamera Mirrorless</h3>
+          <div class="product-price">Rp 8.500.000</div>
+          <a href="https://wa.me/628123456789?text=Saya%20tertarik%20dengan%20Kamera%20Mirrorless" class="btn-whatsapp">Pesan via WhatsApp</a>
+        </div>
+      </div>
+      
+      <!-- Produk 6 -->
+      <div class="product-card">
+        <img src="/api/placeholder/400/320" alt="Produk 6" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">Laptop Ultrabook</h3>
+          <div class="product-price">Rp 12.999.000</div>
+          <a href="https://wa.me/628123456789?text=Saya%20tertarik%20dengan%20Laptop%20Ultrabook" class="btn-whatsapp">Pesan via WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <p>&copy; 2025 Toko Online Kami. Semua Hak Dilindungi.</p>
+  </footer>
+
+  <script>
+    // Fungsi untuk menghasilkan angka acak dalam rentang
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+    
+    // Fungsi untuk membuat elemen salju
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      
+      const size = randomBetween(3, 8);
+      const startX = randomBetween(0, window.innerWidth);
+      const fallDuration = randomBetween(10, 20);
+      
+      snowflake.style.width = `${size}px`;
+      snowflake.style.height = `${size}px`;
+      snowflake.style.left = `${startX}px`;
+      snowflake.style.animationDuration = `${fallDuration}s`;
+      
+      return snowflake;
+    }
+    
+    // Fungsi untuk membuat elemen hujan
+    function createRaindrop() {
+      const raindrop = document.createElement('div');
+      raindrop.classList.add('raindrop');
+      
+      const height = randomBetween(20, 30);
+      const startX = randomBetween(0, window.innerWidth);
+      const fallDuration = randomBetween(0.5, 1.5);
+      
+      raindrop.style.height = `${height}px`;
+      raindrop.style.left = `${startX}px`;
+      raindrop.style.animationDuration = `${fallDuration}s`;
+      
+      return raindrop;
+    }
+    
+    // Fungsi untuk membuat elemen matahari
+    function createSun() {
+      const sun = document.createElement('div');
+      sun.classList.add('sun');
+      return sun;
+    }
+    
+    let currentWeather = null;
+    let weatherInterval = null;
+    
+    // Fungsi untuk mengubah cuaca
+    function changeWeather(weather) {
+      // Hentikan interval sebelumnya jika ada
+      if (weatherInterval) {
+        clearInterval(weatherInterval);
+      }
+      
+      // Hapus semua efek cuaca sebelumnya
+      const weatherEffect = document.getElementById('weatherEffect');
+      weatherEffect.innerHTML = '';
+      
+      // Ubah warna latar belakang
+      if (weather === 'snow') {
+        document.body.style.backgroundColor = '#e6f2ff';
+        
+        // Tambahkan salju
+        weatherInterval = setInterval(() => {
+          const snowflake = createSnowflake();
+          weatherEffect.appendChild(snowflake);
+          
+          // Hapus salju setelah animasi selesai
+          setTimeout(() => {
+            if (snowflake.parentNode === weatherEffect) {
+              weatherEffect.removeChild(snowflake);
+            }
+          }, parseInt(snowflake.style.animationDuration) * 1000);
+        }, 100);
+      } 
+      else if (weather === 'rain') {
+        document.body.style.backgroundColor = '#b3c6d1';
+        
+        // Tambahkan hujan
+        weatherInterval = setInterval(() => {
+          const raindrop = createRaindrop();
+          weatherEffect.appendChild(raindrop);
+          
+          // Hapus hujan setelah animasi selesai
+          setTimeout(() => {
+            if (raindrop.parentNode === weatherEffect) {
+              weatherEffect.removeChild(raindrop);
+            }
+          }, parseInt(raindrop.style.animationDuration) * 1000);
+        }, 20);
+      } 
+      else if (weather === 'sunny') {
+        document.body.style.backgroundColor = '#f7f9c0';
+        
+        // Tambahkan matahari
+        const sun = createSun();
+        weatherEffect.appendChild(sun);
+      }
+      
+      currentWeather = weather;
+    }
+    
+    // Mulai dengan tema salju saat halaman dimuat
+    window.onload = function() {
+      changeWeather('snow');
+      
+      // Siklus otomatis ganti cuaca setiap 15 detik
+      setInterval(() => {
+        const weathers = ['snow', 'rain', 'sunny'];
+        const currentIndex = weathers.indexOf(currentWeather);
+        const nextIndex = (currentIndex + 1) % weathers.length;
+        changeWeather(weathers[nextIndex]);
+      }, 15000);
+    };
+  </script>
+</body>
+</html>
